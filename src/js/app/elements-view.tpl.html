@@ -1,0 +1,21 @@
+<div class="elements-view__ctrls">
+  <form ng-submit="setWidth()">
+    <label>Width: <input type="number" ng-model="model.width" min="100" max="600" step="1"></label>
+    <button type="submit">Set</button>
+  </form>
+</div>
+<div>
+  <div class="elements-view__ctrls_btn">
+    <button type="submit">BUTTON</button>
+  </div>  
+
+  <div ng-repeat="item in [ { 'name':'Item 1','repeat':6 }, { 'name':'Item 2', 'repeat':5 } , { 'name':'Item 3', 'repeat':1 } ] " class="elements-view__ctrls_items">
+    <div>
+        <div>{{ item.name.concat(' ').repeat(item.repeat) }}</div>
+        <button></button>
+        <button></button>
+    </div>
+  </div>  
+
+
+</div>
