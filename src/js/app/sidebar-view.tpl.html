@@ -1,19 +1,18 @@
-<div class="content-view__item">
+<div class="sidebar-view__item">
     Selected:   {{ ctrlScope.getItemById()["title"] }}
 </div>
+<br>
+<div class="sidebar-view__item">Tags:</div>
 
-    <br>
-    <div class="content-view__item">Tags:</div>
+<ng-container ng-repeat="tag in ctrlScope.getItemById()['tags']">
+    <div class="sidebar-view__item">
+        {{ tag }}
+        <button ng-click = "ctrlScope.delCurItemTagByIndex($index)" >x</button>
+    </div>
+</ng-container>
 
-    <ng-container ng-repeat="tag in ctrlScope.getItemById()['tags']">
-        <div class="content-view__item">
-            {{ tag }}
-            <button ng-click = "ctrlScope.delCurItemTagByIndex($index)" >x</button>
-        </div>
-    </ng-container>
-
-    <form  class="content-view__item" ng-submit="addTag()">
-        <label>New tag: <input type="string" name="tag" ng-model="tag" ng-disabled="!ctrlScope.getItemById()" ></label>
-        <button type="submit" ng-disabled="!ctrlScope.getItemById()" >Add</button>
-    </form>
+<form  class="sidebar-view__item" ng-submit="addTag()">
+    <label>New tag: <input type="string" name="tag" ng-model="tag" ng-disabled="!ctrlScope.getItemById()" ></label>
+    <button type="submit" ng-disabled="!ctrlScope.getItemById()" >Add</button>
+</form>
 

@@ -13,9 +13,9 @@ angular.module("app", ["templates"])
       $scope.sortBy= 'title';
       $scope.findBy = '';
       $scope.newItemLabel = '';
-      $scope.setCurrent = ( item ) => {  $scope.currentItem = item ; console.log( $scope.currentItem  ) ; };
-      $scope.getItemById = ( id = $scope.currentItem ) => $scope.data.find( i => i.id === id ) ;
       $scope.$watch('findBy' , () => { $scope.currentItem =  ( x => x ? x : $scope.currentItem )( $scope.data.find( x => x.title === $scope.findBy )?.id)}, false) ;
+      $scope.setCurrent = ( item ) => $scope.currentItem = item ;
+      $scope.getItemById = ( id = $scope.currentItem ) => $scope.data.find( i => i.id === id ) ;
       $scope.addItem = () => $scope.data.push( $scope.createItem( $scope.newItemLabel ) ) ;
       $scope.createItem = (title) => ({id: makeDataId(), title: title, tags:[], date: (new Date()).toJSON() }) ;
       $scope.delCurItemTagByIndex = (tagIndex) => $scope.getItemById().tags.splice(tagIndex, 1) ;
@@ -88,7 +88,7 @@ angular.module("app", ["templates"])
       `<some-3 ctrlscope = 'ctrlScope'></some-3>
       <div> 
         <ng-container ng-repeat="item in ctrlScope.data | orderBy: ctrlScope.sortBy  ">
-          <div class="content-view__item" ng-class = "item.id == ctrlScope.currentItem ? 'content-view-selected':''"  ng-click = "ctrlScope.setCurrent(item.id)"> 
+          <div class="content-view__item content-view__pointed " ng-class = "item.id == ctrlScope.currentItem ? 'content-view-selected':''"  ng-click = "ctrlScope.setCurrent(item.id)"> 
               <div> Title: {{item.title}} </div>
               <div> Date: {{ item.date | date :  ctrlScope.isShowTime ? 'MM/dd/yyyy @ h:mma' : 'MM/dd/yyyy'  }} </div>
           </div>
