@@ -74,13 +74,7 @@ angular.module("app", ["templates"])
     return {
       scope: {ctrlScope : "=ctrlscope"  },
       restrict: "E",
-      template: 
-         `<some-2 ctrlscope = 'ctrlScope' > </some-2> 
-         <form class="content-view__item" ng-submit="ctrlScope.addItem()">
-          <label>Label: <input type="string" ng-model="ctrlScope.newItemLabel" ></label>
-          <button type="submit">Add</button>
-         </form>`
-     ,
+      template:"<some-2 ctrlscope = 'ctrlScope' > </some-2>" 
     };
   })
 
@@ -88,16 +82,7 @@ angular.module("app", ["templates"])
     return {
       scope: { ctrlScope : "=ctrlscope"  },
       restrict: "E",
-      template: 
-      `<some-3 ctrlscope = 'ctrlScope'></some-3>
-      <div> 
-        <ng-container ng-repeat="item in ctrlScope.dataFiltered() | orderBy: ctrlScope.sortBy  ">
-          <div class="content-view__item content-view__pointed " ng-class = "item.id == ctrlScope.currentItem ? 'content-view-selected':''"  ng-click = "ctrlScope.setCurrent(item.id)"> 
-              <div> Title: {{item.title}} </div>
-              <div> Date: {{ item.date | date :  ctrlScope.isShowTime ? 'MM/dd/yyyy @ h:mma' : 'MM/dd/yyyy'  }} </div>
-          </div>
-        </ng-container> 
-      </div>`,
+      template:"<some-3 ctrlscope = 'ctrlScope'></some-3>"
     };
   })
 
@@ -105,18 +90,7 @@ angular.module("app", ["templates"])
     return {
       scope: {ctrlScope : "=ctrlscope"},
       restrict: "E",
-      template: 
-        `<summary-view curentitem = 'ctrlScope.getItemById()' data = 'ctrlScope.data'   ></summary-view> 
-        <div class="content-view__item"> 
-        <label>Order by:</label> 
-          <select name='order' ng-model='ctrlScope.sortBy'> <option value='title' >Title</option> <option value='date' >Date</option> </select> 
-          <br>
-        <label>Show time:</label> 
-        <input type="checkbox" ng-model="ctrlScope.isShowTime">
-          <br>
-        <label>Search: </label>   
-        <input ng-model="ctrlScope.findBy">
-      </div>`
+      template:"<summary-view curentitem = 'ctrlScope.getItemById()' data = 'ctrlScope.data'   ></summary-view> "
     };
   })
 
