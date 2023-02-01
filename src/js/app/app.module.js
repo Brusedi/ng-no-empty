@@ -8,12 +8,16 @@ angular.module("app", ["templates"])
     };
     function appDataCtrl($scope, $element) {
       $scope.data = ( () => { console.log('initializing data....') ; return makeDefaulData();} )()
+      $scope.dataFiltered = ( titleFilter = $scope.findBy ) => $scope.data.filter( x => x.title.includes(titleFilter) ) 
+
       $scope.currentItem;
       $scope.isShowTime=true;
       $scope.sortBy= 'title';
       $scope.findBy = '';
       $scope.newItemLabel = '';
-      $scope.$watch('findBy' , () => { $scope.currentItem =  ( x => x ? x : $scope.currentItem )( $scope.data.find( x => x.title === $scope.findBy )?.id)}, false) ;
+      //$scope.$watch('findBy' , () => { $scope.currentItem =  ( x => x ? x : $scope.currentItem )( $scope.data.find( x => x.title === $scope.findBy )?.id)}, false) ;
+
+
       $scope.setCurrent = ( item ) => $scope.currentItem = item ;
       $scope.getItemById = ( id = $scope.currentItem ) => $scope.data.find( i => i.id === id ) ;
       $scope.addItem = () => $scope.data.push( $scope.createItem( $scope.newItemLabel ) ) ;
@@ -87,7 +91,7 @@ angular.module("app", ["templates"])
       template: 
       `<some-3 ctrlscope = 'ctrlScope'></some-3>
       <div> 
-        <ng-container ng-repeat="item in ctrlScope.data | orderBy: ctrlScope.sortBy  ">
+        <ng-container ng-repeat="item in ctrlScope.dataFiltered() | orderBy: ctrlScope.sortBy  ">
           <div class="content-view__item content-view__pointed " ng-class = "item.id == ctrlScope.currentItem ? 'content-view-selected':''"  ng-click = "ctrlScope.setCurrent(item.id)"> 
               <div> Title: {{item.title}} </div>
               <div> Date: {{ item.date | date :  ctrlScope.isShowTime ? 'MM/dd/yyyy @ h:mma' : 'MM/dd/yyyy'  }} </div>
@@ -125,7 +129,7 @@ angular.module("app", ["templates"])
     };
     function summaryViewCtrl($scope, $element) {
       $scope.lastDateElement = () => $scope.data.reduce( (a,x) => a && new Date(a.date) > new Date(x.date) ? a : x , undefined )
-      $scope.uniqueTags = () => $scope.data.reduce( (a,x) => a.concat(x.tags), [] ).filter( (v,i,s) => s.indexOf(v) === i ) 
+      $scope.uniqueTags = () => { console.log('1') ; $scope.data.reduce( (a,x) => a.concat(x.tags), [] ).filter( (v,i,s) => s.indexOf(v) === i ) }
     }
 
   });
