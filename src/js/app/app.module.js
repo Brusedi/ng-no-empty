@@ -7,23 +7,28 @@ angular.module("app", ["templates"])
       controller: ["$scope", "$element", appDataCtrl],
     };
     function appDataCtrl($scope, $element) {
+
       $scope.data = ( () => { console.log('initializing data....') ; return makeDefaulData();} )()
       $scope.dataFiltered = ( titleFilter = $scope.findBy ) => $scope.data.filter( x => x.title.includes(titleFilter) ) 
+
+      const uniqueTags =  (dt = $scope.data) => dt.reduce( (a,x) => a.concat(x.tags), [] ).filter( (v,i,s) => s.indexOf(v) === i ) 
+      const lastDateElement = () => $scope.data.reduce( (a,x) => a && new Date(a.date) > new Date(x.date) ? a : x , undefined )
+      const createItem = (title) => ({id: makeDataId(), title: title, tags:[], date: (new Date()).toJSON() }) ;
 
       $scope.currentItem;
       $scope.isShowTime=true;
       $scope.sortBy= 'title';
       $scope.findBy = '';
       $scope.newItemLabel = '';
-      //$scope.$watch('findBy' , () => { $scope.currentItem =  ( x => x ? x : $scope.currentItem )( $scope.data.find( x => x.title === $scope.findBy )?.id)}, false) ;
-
-
+      $scope.uniqueTags = uniqueTags();
+      $scope.lastDateElement = lastDateElement();
+            
       $scope.setCurrent = ( item ) => $scope.currentItem = item ;
       $scope.getItemById = ( id = $scope.currentItem ) => $scope.data.find( i => i.id === id ) ;
-      $scope.addItem = () => $scope.data.push( $scope.createItem( $scope.newItemLabel ) ) ;
-      $scope.createItem = (title) => ({id: makeDataId(), title: title, tags:[], date: (new Date()).toJSON() }) ;
-      $scope.delCurItemTagByIndex = (tagIndex) => $scope.getItemById().tags.splice(tagIndex, 1) ;
-      $scope.addCurItemTag = ( tag ) => $scope.getItemById().tags.push(tag) ;
+      $scope.addItem = () => { $scope.data.push( createItem( $scope.newItemLabel ) );  $scope.lastDateElement = lastDateElement() };
+      $scope.delCurItemTagByIndex = (tagIndex) => {  $scope.getItemById().tags.splice(tagIndex, 1) ;   $scope.uniqueTags =  uniqueTags(); }
+      $scope.addCurItemTag = ( tag ) => {  $scope.getItemById().tags.push(tag) ; $scope.uniqueTags =  uniqueTags(); }
+
     }
   })
   .directive("contentView", () => {
@@ -90,21 +95,15 @@ angular.module("app", ["templates"])
     return {
       scope: {ctrlScope : "=ctrlscope"},
       restrict: "E",
-      template:"<summary-view curentitem = 'ctrlScope.getItemById()' data = 'ctrlScope.data'   ></summary-view> "
+      template:"<summary-view lastelement = 'ctrlScope.lastDateElement'  tags = 'ctrlScope.uniqueTags'   ></summary-view> "
     };
   })
 
   .directive("summaryView", () => {
     return {
-      scope: { data : "=data "  },
+      scope: { lastDateElement : "=lastelement", uniqueTags : "=tags"  },
       restrict: "E",
       templateUrl: "./js/app/summary-view.tpl.html",
-      controller: ["$scope", "$element", summaryViewCtrl],
     };
-    function summaryViewCtrl($scope, $element) {
-      $scope.lastDateElement = () => $scope.data.reduce( (a,x) => a && new Date(a.date) > new Date(x.date) ? a : x , undefined )
-      $scope.uniqueTags = () => { console.log('1') ; $scope.data.reduce( (a,x) => a.concat(x.tags), [] ).filter( (v,i,s) => s.indexOf(v) === i ) }
-    }
-
   });
 
