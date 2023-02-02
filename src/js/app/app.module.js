@@ -22,10 +22,12 @@ angular.module("app", ["templates"])
       $scope.newItemLabel = '';
       $scope.uniqueTags = uniqueTags();
       $scope.lastDateElement = lastDateElement();
-            
+      $scope.$watchCollection("data", ( ) => $scope.lastDateElement = lastDateElement() );
+      
       $scope.setCurrent = ( item ) => $scope.currentItem = item ;
       $scope.getItemById = ( id = $scope.currentItem ) => $scope.data.find( i => i.id === id ) ;
-      $scope.addItem = () => { $scope.data.push( createItem( $scope.newItemLabel ) );  $scope.lastDateElement = lastDateElement() };
+      $scope.addItem = () => $scope.data.push( createItem( $scope.newItemLabel ));  // );  $scope.lastDateElement = lastDateElement() };
+
       $scope.delCurItemTagByIndex = (tagIndex) => {  $scope.getItemById().tags.splice(tagIndex, 1) ;   $scope.uniqueTags =  uniqueTags(); }
       $scope.addCurItemTag = ( tag ) => {  $scope.getItemById().tags.push(tag) ; $scope.uniqueTags =  uniqueTags(); }
 
